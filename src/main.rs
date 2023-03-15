@@ -1,4 +1,4 @@
-use poise::serenity_prelude::{self as serenity, Member};
+use poise::serenity_prelude::{self as serenity, Activity, Member, OnlineStatus};
 use rand::Rng;
 
 struct Data {} // User data, which is stored and accessible in all command invocations
@@ -22,7 +22,7 @@ async fn nakki(
     let excluded: Vec<String> = users.map_or(vec![], |users| {
         users.split(',').map(|id| id.trim().to_string()).collect()
     });
-    if excluded.len() == members.len() {
+    if excluded.len() >= members.len() {
         ctx.say("All members excluded").await?;
         return Ok(());
     }
@@ -55,6 +55,8 @@ async fn main() {
         )
         .setup(|ctx, _ready, framework| {
             Box::pin(async move {
+                ctx.set_presence(Some(Activity::listening("/nakki")), OnlineStatus::Online)
+                    .await;
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
                 Ok(Data {})
             })
