@@ -1,0 +1,8 @@
+version: "3"
+services:
+  nakitin:
+    image: "nakitin"
+    restart: "always"
+    container_name: "nakitin"
+    environment:
+      - DISCORD_TOKEN=$DISCORD_TOKEN
